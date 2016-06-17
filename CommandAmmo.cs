@@ -1,13 +1,13 @@
-﻿using System;
+﻿using Rocket.API;
+using Rocket.Core.Logging;
+using Rocket.Unturned.Chat;
+using Rocket.Unturned.Items;
+using Rocket.Unturned.Player;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Rocket.API;
-using Rocket.Unturned.Player;
-using Rocket.Core.Logging;
-using Rocket.Unturned.Chat;
-using Rocket.Unturned.Items;
 
 namespace EasyAmmoRocketMod
 {
@@ -57,31 +57,24 @@ namespace EasyAmmoRocketMod
             currentWeapon = (SDG.Unturned.ItemGunAsset)currentEquiped;
             if (currentWeapon == null)
             {
-                UnturnedChat.Say(caller, "Gun asset is null!");
+                UnturnedChat.Say(caller, "Gun asset is not found!!");
                 return;
             }
 
             if (EnteredAmount)
             {
-                if (Uplayer.GiveItem(currentWeapon.magazineID, (byte)ammoAmountToSpawn))
+                if (EasyAmmo.Instance.Configuration.Instance.ClipLimitEnabled)
                 {
-                    UnturnedChat.Say(caller, "Giving you " + ammoAmountToSpawn.ToString() + " of " + UnturnedItems.GetItemAssetById(currentWeapon.magazineID).Name);
+                    SpawnMagsWithLimit(ammoAmountToSpawn, caller, currentWeapon, Uplayer);
                 }
                 else
                 {
-                    UnturnedChat.Say(caller, "Failed to spawn a magazine for the gun your holding!");
+                    SpawnMags(ammoAmountToSpawn, caller, currentWeapon, Uplayer);
                 }
             }
             else
             {
-                if (Uplayer.GiveItem(currentWeapon.magazineID, (byte)1))
-                {
-                    UnturnedChat.Say(caller, "Giving you 1 " + " of " + UnturnedItems.GetItemAssetById(currentWeapon.magazineID).Name);
-                }
-                else
-                {
-                    UnturnedChat.Say(caller, "Failed to spawn a magazine for the gun your holding!");
-                }
+                SpawnMags((ushort)1, caller, currentWeapon, Uplayer);
             }
         }
 
@@ -103,6 +96,47 @@ namespace EasyAmmoRocketMod
         public string Syntax
         {
             get { return "<amount of ammo>"; }
+        }
+
+        public void SpawnMags(ushort ammoAmountToSpawn, IRocketPlayer caller, SDG.Unturned.ItemGunAsset currentWeapon, UnturnedPlayer Uplayer)
+        {
+            if (Uplayer.GiveItem(currentWeapon.magazineID, (byte)ammoAmountToSpawn))
+            {
+                UnturnedChat.Say(caller, "Giving you " + ammoAmountToSpawn.ToString() + " of " + UnturnedItems.GetItemAssetById(currentWeapon.magazineID).Name);
+            }
+            else
+            {
+                 UnturnedChat.Say(caller, "Failed to spawn a magazine for the gun your holding!");
+            }
+        }
+
+        public void SpawnMagsWithLimit(ushort ammoAmountToSpawn, IRocketPlayer caller, SDG.Unturned.ItemGunAsset currentWeapon, UnturnedPlayer Uplayer)
+        {
+            if (ammoAmountToSpawn <= (ushort)EasyAmmo.Instance.Configuration.Instance.ClipLimit || caller.HasPermission("easyammo.bypasslimit"))
+            {
+                if (Uplayer.GiveItem(currentWeapon.magazineID, (byte)ammoAmountToSpawn))
+                {
+                    UnturnedChat.Say(caller, "Giving you " + ammoAmountToSpawn.ToString() + " of " + UnturnedItems.GetItemAssetById(currentWeapon.magazineID).Name);
+                }
+                else
+                {
+                    UnturnedChat.Say(caller, "Failed to spawn a magazine for the gun your holding!");
+                } 
+            }
+            else 
+            {
+                ushort amountoverlimit = ammoAmountToSpawn;
+                ammoAmountToSpawn = (ushort)EasyAmmo.Instance.Configuration.Instance.ClipLimit;
+
+                if (Uplayer.GiveItem(currentWeapon.magazineID, (byte)ammoAmountToSpawn))
+                {
+                    UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("over_clip_spawn_limit", amountoverlimit.ToString(), EasyAmmo.Instance.Configuration.Instance.ClipLimit, UnturnedItems.GetItemAssetById(currentWeapon.magazineID).Name));
+                }
+                else
+                {
+                     UnturnedChat.Say(caller, "Failed to spawn a magazine for the gun your holding!");
+                } 
+            }
         }
     }
 }

@@ -9,11 +9,13 @@ namespace EasyAmmoRocketMod
 {
     public class EasyAmmoConfig : IRocketPluginConfiguration
     {
-       public bool PluginEnabled;
+       public int ClipLimit;
+       public bool ClipLimitEnabled;
 
         public void LoadDefaults()
         {
-            PluginEnabled = true;
+            ClipLimitEnabled = true;
+            ClipLimit = 10;
         }
     }
 }
