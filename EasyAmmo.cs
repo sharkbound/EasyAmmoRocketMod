@@ -34,11 +34,13 @@ namespace EasyAmmoRocketMod
             {
                 return new Rocket.API.Collections.TranslationList
                 {
-                    {"over_clip_spawn_limit", "{0} is over the spawn limit, giving you {1} of \"{2}\" instead"},
+                    {"over_clip_spawn_limit_giving", "{0} is over the spawn limit, giving you {1} of \"{2}\" ID: \"{3}\" instead"},
+                    {"over_clip_spawn_limit_dropping", "{0} is over the spawn limit, dropping {1} of \"{2}\" ID: \"{3}\" instead"},
                     {"no_gun_equipped", "You dont have any guns equipped!"},
                     {"nothing_equipped", "You dont have anything equipped!"},
                     {"gun_asset_not_found","Gun asset is not found!"},
-                    {"giving_mags", "Giving you {0} of {1}"},
+                    {"dropping_mags", "Dropping {0} of \"{1}\" ID: \"{2}\" on your location"},
+                    {"giving_mags", "Giving you {0} of \"{1}\" ID: \"{2}\""},
                     {"failed_to_spawn_mags", "Failed to spawn a magazine for the gun you are holding!"}
                 };
             }
