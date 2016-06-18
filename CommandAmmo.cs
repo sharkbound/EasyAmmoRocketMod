@@ -42,12 +42,12 @@ namespace EasyAmmoRocketMod
             currentEquiped = Uplayer.Player.equipment.asset;
             if (currentEquiped == null)
             {
-                UnturnedChat.Say(caller, "you dont have anything equipped!");
+                UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("nothing_equipped"));
                 return;
             }
             if (currentEquiped.ItemType != SDG.Unturned.EItemType.GUN )
             {
-                UnturnedChat.Say(caller, "you dont have a gun equipped currently!");
+                UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("no_gun_equipped"));
                 return;
             }
 
@@ -57,7 +57,7 @@ namespace EasyAmmoRocketMod
             currentWeapon = (SDG.Unturned.ItemGunAsset)currentEquiped;
             if (currentWeapon == null)
             {
-                UnturnedChat.Say(caller, "Gun asset is not found!!");
+                UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("gun_asset_not_found"));
                 return;
             }
 
@@ -80,7 +80,7 @@ namespace EasyAmmoRocketMod
 
         public string Help
         {
-            get { return "return gives you the specified number of clips for yuor current weapon."; }
+            get { return "gives you the specified number of clips for your currently equipped weapon."; }
         }
 
         public string Name
@@ -102,11 +102,11 @@ namespace EasyAmmoRocketMod
         {
             if (Uplayer.GiveItem(currentWeapon.magazineID, (byte)ammoAmountToSpawn))
             {
-                UnturnedChat.Say(caller, "Giving you " + ammoAmountToSpawn.ToString() + " of " + UnturnedItems.GetItemAssetById(currentWeapon.magazineID).Name);
+                UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("giving_mags", ammoAmountToSpawn.ToString(), UnturnedItems.GetItemAssetById(currentWeapon.magazineID).Name));
             }
             else
             {
-                 UnturnedChat.Say(caller, "Failed to spawn a magazine for the gun your holding!");
+                UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("failed_to_spawn_mags"));
             }
         }
 
@@ -116,11 +116,11 @@ namespace EasyAmmoRocketMod
             {
                 if (Uplayer.GiveItem(currentWeapon.magazineID, (byte)ammoAmountToSpawn))
                 {
-                    UnturnedChat.Say(caller, "Giving you " + ammoAmountToSpawn.ToString() + " of " + UnturnedItems.GetItemAssetById(currentWeapon.magazineID).Name);
+                    UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("giving_mags", ammoAmountToSpawn.ToString(), UnturnedItems.GetItemAssetById(currentWeapon.magazineID).Name));
                 }
                 else
                 {
-                    UnturnedChat.Say(caller, "Failed to spawn a magazine for the gun your holding!");
+                    UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("failed_to_spawn_mags"));
                 } 
             }
             else 
@@ -134,7 +134,7 @@ namespace EasyAmmoRocketMod
                 }
                 else
                 {
-                     UnturnedChat.Say(caller, "Failed to spawn a magazine for the gun your holding!");
+                     UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("failed_to_spawn_mags"));
                 } 
             }
         }
