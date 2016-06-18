@@ -20,10 +20,7 @@ namespace EasyAmmoRocketMod
 
             Logger.Log("EasyAmmo loaded!");
             Logger.Log("ClipLimitEnabled : " + Instance.Configuration.Instance.ClipLimitEnabled);
-            if (Instance.Configuration.Instance.ClipLimitEnabled)
-            {
-                Logger.Log("ClipLimit : " + Instance.Configuration.Instance.ClipLimit.ToString());
-            }
+            Logger.Log("ClipLimit : " + Instance.Configuration.Instance.ClipLimit.ToString());
         }
 
         protected override void Unload()
@@ -37,7 +34,12 @@ namespace EasyAmmoRocketMod
             {
                 return new Rocket.API.Collections.TranslationList
                 {
-                    {"over_clip_spawn_limit", "{0} is over the spawn limit, giving you {1} of \"{2}\" instead"}
+                    {"over_clip_spawn_limit", "{0} is over the spawn limit, giving you {1} of \"{2}\" instead"},
+                    {"no_gun_equipped", "You dont have any guns equipped!"},
+                    {"nothing_equipped", "You dont have anything equipped!"},
+                    {"gun_asset_not_found","Gun asset is not found!"},
+                    {"giving_mags", "Giving you {0} of {1}"},
+                    {"failed_to_spawn_mags", "Failed to spawn a magazine for the gun you are holding!"}
                 };
             }
         }
