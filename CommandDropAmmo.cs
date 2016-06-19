@@ -3,6 +3,7 @@ using Rocket.Core.Logging;
 using Rocket.Unturned.Chat;
 using Rocket.Unturned.Items;
 using Rocket.Unturned.Player;
+using SDG.Unturned;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,11 +12,11 @@ using System.Threading.Tasks;
 
 namespace EasyAmmoRocketMod
 {
-    class CommandAmmo : IRocketCommand
+    class CommandDropAmmo : IRocketCommand
     {
         public List<string> Aliases
         {
-            get { return new List<string> { }; }
+            get { return new List<string> { "dammo", "da", "dropa" }; }
         }
 
         public AllowedCaller AllowedCaller
@@ -31,7 +32,7 @@ namespace EasyAmmoRocketMod
             SDG.Unturned.ItemAsset currentEquiped;
             UnturnedPlayer Uplayer = (UnturnedPlayer)caller;
 
-           if (command.Length == 1)
+            if (command.Length == 1)
             {
                 if (ushort.TryParse(command[0], out ammoAmountToSpawn))
                 {
@@ -45,7 +46,7 @@ namespace EasyAmmoRocketMod
                 UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("nothing_equipped"));
                 return;
             }
-            if (currentEquiped.ItemType != SDG.Unturned.EItemType.GUN )
+            if (currentEquiped.ItemType != SDG.Unturned.EItemType.GUN)
             {
                 UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("no_gun_equipped"));
                 return;
@@ -65,77 +66,73 @@ namespace EasyAmmoRocketMod
             {
                 if (EasyAmmo.Instance.Configuration.Instance.ClipLimitEnabled)
                 {
-                    SpawnMagsWithLimit(ammoAmountToSpawn, caller, currentWeapon, Uplayer);
+                    DropMagsWithLimit(ammoAmountToSpawn, caller, currentWeapon, Uplayer);
                 }
                 else
                 {
-                    SpawnMags(ammoAmountToSpawn, caller, currentWeapon, Uplayer);
+                    DropMags(ammoAmountToSpawn, caller, currentWeapon, Uplayer);
                 }
             }
             else
             {
-                SpawnMags((ushort)1, caller, currentWeapon, Uplayer);
+                DropMags((ushort)1, caller, currentWeapon, Uplayer);
             }
         }
 
         public string Help
         {
-            get { return "gives you the specified number of clips for your currently equipped weapon."; }
+            get { return "drops the specified number of clips for your currently equipped weapon."; }
         }
 
         public string Name
         {
-            get { return "ammo"; }
+            get { return "dropammo"; }
         }
 
         public List<string> Permissions
         {
-            get { return new List<string>{"ammo"}; }
+            get { return new List<string> { "dropammo" }; }
         }
 
         public string Syntax
         {
-            get { return "<amount of ammo>"; }
+            get { return "(amount of ammo)"; }
         }
 
-        public void SpawnMags(ushort ammoAmountToSpawn, IRocketPlayer caller, SDG.Unturned.ItemGunAsset currentWeapon, UnturnedPlayer Uplayer)
+        public void DropMags(ushort ammoAmountToSpawn, IRocketPlayer caller, SDG.Unturned.ItemGunAsset currentWeapon, UnturnedPlayer Uplayer)
         {
-            if (Uplayer.GiveItem(currentWeapon.magazineID, (byte)ammoAmountToSpawn))
+            UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("dropping_mags", ammoAmountToSpawn.ToString(), UnturnedItems.GetItemAssetById(currentWeapon.magazineID).Name, currentWeapon.magazineID.ToString()));
+
+            for (int ii = 0; ii < (int)ammoAmountToSpawn; ii++)
             {
-                UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("giving_mags", ammoAmountToSpawn.ToString(), UnturnedItems.GetItemAssetById(currentWeapon.magazineID).Name, currentWeapon.magazineID.ToString()));
-            }
-            else
-            {
-                UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("failed_to_spawn_mags"));
+                ItemManager.dropItem(new Item (currentWeapon.magazineID, true), Uplayer.Position, true, true, true);
             }
         }
 
-        public void SpawnMagsWithLimit(ushort ammoAmountToSpawn, IRocketPlayer caller, SDG.Unturned.ItemGunAsset currentWeapon, UnturnedPlayer Uplayer)
+        public void DropMagsWithLimit(ushort ammoAmountToSpawn, IRocketPlayer caller, SDG.Unturned.ItemGunAsset currentWeapon, UnturnedPlayer Uplayer)
         {
             if (ammoAmountToSpawn <= (ushort)EasyAmmo.Instance.Configuration.Instance.ClipLimit || caller.HasPermission("easyammo.bypasslimit"))
             {
-                if (Uplayer.GiveItem(currentWeapon.magazineID, (byte)ammoAmountToSpawn))
+                UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("dropping_mags", ammoAmountToSpawn.ToString(), UnturnedItems.GetItemAssetById(currentWeapon.magazineID).Name, currentWeapon.magazineID.ToString()));
+
+                for (int ii = 0; ii < (int)ammoAmountToSpawn; ii++)
                 {
-                    UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("giving_mags", ammoAmountToSpawn.ToString(), UnturnedItems.GetItemAssetById(currentWeapon.magazineID).Name, currentWeapon.magazineID.ToString()));
+                    ItemManager.dropItem(new Item(currentWeapon.magazineID, true), Uplayer.Position, true, true, true);
                 }
-                else
-                {
-                    UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("failed_to_spawn_mags"));
-                } 
             }
-            else 
+            else
             {
+                UnturnedItems.GetItemAssetById(1);
                 ushort amountoverlimit = ammoAmountToSpawn;
                 ammoAmountToSpawn = (ushort)EasyAmmo.Instance.Configuration.Instance.ClipLimit;
 
-                if (Uplayer.GiveItem(currentWeapon.magazineID, (byte)ammoAmountToSpawn))
+                UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("over_clip_spawn_limit_dropping", amountoverlimit.ToString(), EasyAmmo.Instance.Configuration.Instance.ClipLimit, UnturnedItems.GetItemAssetById(currentWeapon.magazineID).Name, currentWeapon.magazineID.ToString()));
+
+                for (int ii = 0; ii < (int)ammoAmountToSpawn; ii++)
                 {
-                    UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("over_clip_spawn_limit_giving", amountoverlimit.ToString(), EasyAmmo.Instance.Configuration.Instance.ClipLimit, UnturnedItems.GetItemAssetById(currentWeapon.magazineID).Name, currentWeapon.magazineID.ToString()));
+                    ItemManager.dropItem(new Item(currentWeapon.magazineID, true), Uplayer.Position, true, true, true);
                 }
-                else
-                {
-                     UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("failed_to_spawn_mags"));
-                } 
+                
             }
         }
     }
