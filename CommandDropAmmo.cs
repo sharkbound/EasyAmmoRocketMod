@@ -62,7 +62,7 @@ namespace EasyAmmoRocketMod
                 return;
             }
 
-            if (EnteredAmount)
+            if (EnteredAmount && caller.HasPermission("dropammo.amount"))
             {
                 if (EasyAmmo.Instance.Configuration.Instance.ClipLimitEnabled)
                 {
