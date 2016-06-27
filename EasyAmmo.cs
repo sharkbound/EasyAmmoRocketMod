@@ -7,6 +7,7 @@ using Rocket.Unturned.Player;
 using Rocket.API;
 using Rocket.Core.Plugins;
 using Rocket.Core.Logging;
+using Rocket.Unturned.Chat;
 
 namespace EasyAmmoRocketMod
 {
@@ -49,8 +50,34 @@ namespace EasyAmmoRocketMod
                     {"giving_mags", "Giving you {0} of \"{1}\" ID: \"{2}\""},
                     {"removed_mags", "Removed {0} Magazines from your inventory!"},
                     {"failed_to_spawn_mags", "Failed to spawn a magazine for the gun you are holding!"},
-                    {"not_enough_funds","You dont have enough {0} to buy {1} of {2}, {0} need: {3}"}
+                    {"not_enough_funds","You dont have enough {0} to buy {1} of {2}, {0} need: {3}"},
+                    {"weapon_blacklisted","The weapon \"{0}\" is blacklisted, you cannot spawn mags for it using this command!"}
                 };
+            }
+        }
+
+        public static bool CheckIfBlacklisted(IRocketPlayer caller, SDG.Unturned.ItemGunAsset currentWeapon)
+        {
+            bool cantSpawnMag = false;
+            if (!caller.HasPermission("easyammo.bypassblacklist"))
+            {
+                foreach (ushort id in EasyAmmo.Instance.Configuration.Instance.BannedIds)
+                {
+                    if (currentWeapon.Id == id)
+                    {
+                        UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("weapon_blacklisted", currentWeapon.Name));
+                        cantSpawnMag = true;
+                    }
+                }
+            }
+
+            if (cantSpawnMag)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
     }
