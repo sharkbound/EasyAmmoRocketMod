@@ -57,6 +57,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Uconomy">
+      <HintPath>lib\Uconomy.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine">
       <HintPath>lib\UnityEngine.dll</HintPath>
       <Private>False</Private>
@@ -64,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandAmmo.cs" />
+    <Compile Include="CommandClearMag.cs" />
     <Compile Include="CommandDropAmmo.cs" />
     <Compile Include="EasyAmmo.cs" />
     <Compile Include="EasyAmmoConfig.cs" />
