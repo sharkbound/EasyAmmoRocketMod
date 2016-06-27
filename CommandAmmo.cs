@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using fr34kyn01535.Uconomy;
 
 namespace EasyAmmoRocketMod
 {
@@ -64,17 +65,39 @@ namespace EasyAmmoRocketMod
             if (EnteredAmount && caller.HasPermission("ammo.amount"))
             {
                 if (EasyAmmo.Instance.Configuration.Instance.ClipLimitEnabled)
-                {
-                    SpawnMagsWithLimit(ammoAmountToSpawn, caller, currentWeapon, Uplayer);
+                { 
+                    if (EasyAmmo.Instance.Configuration.Instance.UconomySupportEnabled)
+                    {
+                        SpawnMagsWithLimit_Uconomy(ammoAmountToSpawn, caller, currentWeapon, Uplayer); 
+                    }
+                    else
+                    {
+                        SpawnMagsWithLimit(ammoAmountToSpawn, caller, currentWeapon, Uplayer); 
+
+                    }
                 }
                 else
                 {
-                    SpawnMags(ammoAmountToSpawn, caller, currentWeapon, Uplayer);
+                    if (EasyAmmo.Instance.Configuration.Instance.UconomySupportEnabled)
+                    {
+                        SpawnMagsWithLimit_Uconomy(ammoAmountToSpawn, caller, currentWeapon, Uplayer);
+                    }
+                    else
+                    {
+                        SpawnMags(ammoAmountToSpawn, caller, currentWeapon, Uplayer);
+                    }
                 }
             }
             else
             {
-                SpawnMags((ushort)1, caller, currentWeapon, Uplayer);
+                if (EasyAmmo.Instance.Configuration.Instance.UconomySupportEnabled)
+                {
+                    SpawnMagsWithLimit_Uconomy((ushort)1, caller, currentWeapon, Uplayer);
+                }
+                else
+                {
+                    SpawnMags((ushort)1, caller, currentWeapon, Uplayer);
+                }
             }
         }
 
@@ -116,7 +139,7 @@ namespace EasyAmmoRocketMod
             {
                 if (Uplayer.GiveItem(currentWeapon.magazineID, (byte)ammoAmountToSpawn))
                 {
-                    UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("giving_mags", ammoAmountToSpawn.ToString(), UnturnedItems.GetItemAssetById(currentWeapon.magazineID).Name, currentWeapon.magazineID.ToString()));
+                        UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("giving_mags", ammoAmountToSpawn.ToString(), UnturnedItems.GetItemAssetById(currentWeapon.magazineID).Name, currentWeapon.magazineID.ToString()));
                 }
                 else
                 {
@@ -136,6 +159,62 @@ namespace EasyAmmoRocketMod
                 {
                      UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("failed_to_spawn_mags"));
                 } 
+            }
+        }
+        
+        public void SpawnMagsWithLimit_Uconomy(ushort ammoAmountToSpawn, IRocketPlayer caller, SDG.Unturned.ItemGunAsset currentWeapon, UnturnedPlayer Uplayer)
+        {
+            int costMultiplier = EasyAmmo.Instance.Configuration.Instance.PerBulletCostMultiplier;
+            SDG.Unturned.ItemMagazineAsset magazine = (SDG.Unturned.ItemMagazineAsset)UnturnedItems.GetItemAssetById(currentWeapon.magazineID);
+
+            if (ammoAmountToSpawn <= (ushort)EasyAmmo.Instance.Configuration.Instance.ClipLimit || caller.HasPermission("easyammo.bypasslimit"))
+            {
+                if (Uconomy.Instance.Database.GetBalance(caller.Id) >= (magazine.Amount * ammoAmountToSpawn) * costMultiplier)
+                {
+                    if (Uplayer.GiveItem(currentWeapon.magazineID, (byte)ammoAmountToSpawn))
+                    {
+                        Uconomy.Instance.Database.IncreaseBalance(caller.Id, -(decimal)(magazine.Amount * ammoAmountToSpawn) * costMultiplier);
+
+                        UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("giving_mags", ammoAmountToSpawn.ToString(), UnturnedItems.GetItemAssetById(currentWeapon.magazineID).Name, currentWeapon.magazineID.ToString()));
+                        UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("balance", Uconomy.Instance.Database.GetBalance(caller.Id)));
+                    }
+                    else
+                    {
+                        UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("failed_to_spawn_mags"));
+                    } 
+                }
+                else
+                {
+                    UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("not_enough_funds", 
+                        Uconomy.Instance.Configuration.Instance.MoneyName,
+                        ammoAmountToSpawn, magazine.itemName, ((magazine.Amount * ammoAmountToSpawn) * costMultiplier).ToString()));
+                }
+            }
+            else
+            {
+                ushort amountoverlimit = ammoAmountToSpawn;
+                ammoAmountToSpawn = (ushort)EasyAmmo.Instance.Configuration.Instance.ClipLimit;
+
+                if (Uconomy.Instance.Database.GetBalance(caller.Id) >= (magazine.Amount * ammoAmountToSpawn) * costMultiplier)
+                {
+                    if (Uplayer.GiveItem(currentWeapon.magazineID, (byte)ammoAmountToSpawn))
+                    {
+                        Uconomy.Instance.Database.IncreaseBalance(caller.Id, -(decimal)(magazine.Amount * ammoAmountToSpawn) * costMultiplier);
+
+                        UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("over_clip_spawn_limit_giving", amountoverlimit.ToString(), EasyAmmo.Instance.Configuration.Instance.ClipLimit, UnturnedItems.GetItemAssetById(currentWeapon.magazineID).Name, currentWeapon.magazineID.ToString()));
+                        UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("balance", Uconomy.Instance.Database.GetBalance(caller.Id)));
+                    }
+                    else
+                    {
+                        UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("failed_to_spawn_mags"));
+                    }
+                }
+                else
+                {
+                    UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("not_enough_funds",
+                        Uconomy.Instance.Configuration.Instance.MoneyName,
+                        ammoAmountToSpawn, magazine.itemName, ((magazine.Amount * ammoAmountToSpawn) * costMultiplier).ToString()));
+                }
             }
         }
     }
