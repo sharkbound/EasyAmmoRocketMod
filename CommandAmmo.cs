@@ -174,7 +174,6 @@ namespace EasyAmmoRocketMod
 
             if (ammoAmountToSpawn <= (ushort)EasyAmmo.Instance.Configuration.Instance.ClipLimit || caller.HasPermission("easyammo.bypasslimit"))
             {
-                //if (Uconomy.Instance.Database.GetBalance(caller.Id) >= (magazine.Amount * ammoAmountToSpawn) * costMultiplier)
                 if (Uconomy.Instance.Database.GetBalance(caller.Id) >= GetCost(false, ammoAmountToSpawn, currentWeapon, magazine))
                 {
                     if (Uplayer.GiveItem(currentWeapon.magazineID, (byte)ammoAmountToSpawn))
@@ -245,7 +244,7 @@ namespace EasyAmmoRocketMod
                 cost = -cost;
             }
 
-            Logger.Log(cost.ToString());
+            //Logger.Log(cost.ToString());
             return cost;
         }
     }
