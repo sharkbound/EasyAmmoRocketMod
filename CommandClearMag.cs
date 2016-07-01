@@ -48,11 +48,11 @@ namespace EasyAmmoRocketMod
             for (byte page = 0; page < 8; page++)
             {
                 byte amountOfItems = inventory.getItemCount(page);
-                for (byte index = 0; index < amountOfItems; index++)
+                for (int index = amountOfItems - 1; index >= 0; index--)
                 {
                     try
                     {
-                        uItem = UnturnedItems.GetItemAssetById(inventory.getItem(page, index).item.id);
+                        uItem = UnturnedItems.GetItemAssetById(inventory.getItem(page, (byte)index).item.id);
                     }
                     catch (Exception)
                     {
@@ -63,11 +63,11 @@ namespace EasyAmmoRocketMod
                     {
                         if (uItem.type == EItemType.MAGAZINE)
                         {
-                            //Logger.Log("removing id " + uItem.Id.ToString());
-                            inventory.removeItem(page, index);
+                           // Logger.Log("removing id " + uItem.Id.ToString());
+                            inventory.removeItem(page, (byte)index);
                            /* Logger.LogWarning("removed: " + uItem.id.ToString() + "from: " + "Page-" + page.ToString() 
-                                + " index-" + index.ToString()); */
-                            magsRemoved++;
+                                + " index-" + index.ToString()); 
+                            magsRemoved++; */
                         } 
                     }
 

@@ -14,6 +14,8 @@ namespace EasyAmmoRocketMod
        public bool UconomySupportEnabled;
        public int PerBulletCostMultiplier;
        public bool ClipLimitEnabled;
+       public bool ScaleCostByWeaponDamage;
+       public int WeaponDamageCostMultiplier;
        [XmlArrayItem(ElementName = "Id")]
        public List<ushort> BannedIds;
 
@@ -23,6 +25,8 @@ namespace EasyAmmoRocketMod
             PerBulletCostMultiplier = 1;
             ClipLimitEnabled = true;
             ClipLimit = 10;
+            ScaleCostByWeaponDamage = true;
+            WeaponDamageCostMultiplier = 2;
             BannedIds = new List<ushort> { 65535 };
         }
     }
