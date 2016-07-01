@@ -66,8 +66,8 @@ namespace EasyAmmoRocketMod
                            // Logger.Log("removing id " + uItem.Id.ToString());
                             inventory.removeItem(page, (byte)index);
                            /* Logger.LogWarning("removed: " + uItem.id.ToString() + "from: " + "Page-" + page.ToString() 
-                                + " index-" + index.ToString()); 
-                            magsRemoved++; */
+                                + " index-" + index.ToString()); */
+                            magsRemoved++; 
                         } 
                     }
 
