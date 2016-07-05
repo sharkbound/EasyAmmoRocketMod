@@ -25,6 +25,8 @@ namespace EasyAmmoRocketMod
             Logger.Log("ClipLimit : " + Instance.Configuration.Instance.ClipLimit.ToString());
             Logger.Log("UconomySupportEnabled : " + Instance.Configuration.Instance.UconomySupportEnabled.ToString());
             Logger.Log("BulletCostMultiplier : " + Instance.Configuration.Instance.PerBulletCostMultiplier);
+            Logger.Log("ScaleCostByWeaponDamage : " + Instance.Configuration.Instance.ScaleCostByWeaponDamage.ToString());
+            Logger.Log("WeaponDamageCostMultiplier : " + Instance.Configuration.Instance.WeaponDamageCostMultiplier.ToString());
             Logger.LogWarning("------------------------------------");
         }
 
@@ -51,6 +53,7 @@ namespace EasyAmmoRocketMod
                     {"removed_mags", "Removed {0} Magazines from your inventory!"},
                     {"failed_to_spawn_mags", "Failed to spawn a magazine for the gun you are holding!"},
                     {"not_enough_funds","You dont have enough {0} to buy {1} of {2}, {0} need: {3}"},
+                    {"cloned_item","Cloned \"{0}\" {1} times!"},
                     {"weapon_blacklisted","The weapon \"{0}\" is blacklisted, you cannot spawn mags for it using this command!"}
                 };
             }
