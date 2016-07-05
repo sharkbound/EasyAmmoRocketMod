@@ -74,11 +74,11 @@ namespace EasyAmmoRocketMod
                 { 
                     if (EasyAmmo.Instance.Configuration.Instance.UconomySupportEnabled)
                     {
-                        SpawnMagsWithLimit_Uconomy(ammoAmountToSpawn, caller, currentWeapon, Uplayer); 
+                        SpawnMagsWithLimit_Uconomy(ammoAmountToSpawn, caller, currentWeapon, Uplayer, command); 
                     }
                     else
                     {
-                        SpawnMagsWithLimit(ammoAmountToSpawn, caller, currentWeapon, Uplayer); 
+                        SpawnMagsWithLimit(ammoAmountToSpawn, caller, currentWeapon, Uplayer, command); 
 
                     }
                 }
@@ -86,11 +86,11 @@ namespace EasyAmmoRocketMod
                 {
                     if (EasyAmmo.Instance.Configuration.Instance.UconomySupportEnabled)
                     {
-                        SpawnMagsWithLimit_Uconomy(ammoAmountToSpawn, caller, currentWeapon, Uplayer);
+                        SpawnMagsWithLimit_Uconomy(ammoAmountToSpawn, caller, currentWeapon, Uplayer, command);
                     }
                     else
                     {
-                        SpawnMags(ammoAmountToSpawn, caller, currentWeapon, Uplayer);
+                        SpawnMags(ammoAmountToSpawn, caller, currentWeapon, Uplayer, command);
                     }
                 }
             }
@@ -98,11 +98,11 @@ namespace EasyAmmoRocketMod
             {
                 if (EasyAmmo.Instance.Configuration.Instance.UconomySupportEnabled)
                 {
-                    SpawnMagsWithLimit_Uconomy((ushort)1, caller, currentWeapon, Uplayer);
+                    SpawnMagsWithLimit_Uconomy((ushort)1, caller, currentWeapon, Uplayer, command);
                 }
                 else
                 {
-                    SpawnMags((ushort)1, caller, currentWeapon, Uplayer);
+                    SpawnMags((ushort)1, caller, currentWeapon, Uplayer, command);
                 }
             }
         }
@@ -127,11 +127,11 @@ namespace EasyAmmoRocketMod
             get { return "<amount of ammo>"; }
         }
 
-        public void SpawnMags(ushort ammoAmountToSpawn, IRocketPlayer caller, SDG.Unturned.ItemGunAsset currentWeapon, UnturnedPlayer Uplayer)
+        public void SpawnMags(ushort ammoAmountToSpawn, IRocketPlayer caller, SDG.Unturned.ItemGunAsset currentWeapon, UnturnedPlayer Uplayer, string[] command)
         {
-            if (Uplayer.GiveItem(GetMagId(Uplayer, currentWeapon), (byte)ammoAmountToSpawn))
+            if (Uplayer.GiveItem(GetMagId(Uplayer, currentWeapon, command), (byte)ammoAmountToSpawn))
             {
-                UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("giving_mags", ammoAmountToSpawn.ToString(), UnturnedItems.GetItemAssetById(GetMagId(Uplayer, currentWeapon)).Name, GetMagId(Uplayer, currentWeapon).ToString()));
+                UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("giving_mags", ammoAmountToSpawn.ToString(), UnturnedItems.GetItemAssetById(GetMagId(Uplayer, currentWeapon, command)).Name, GetMagId(Uplayer, currentWeapon, command).ToString()));
             }
             else
             {
@@ -139,13 +139,13 @@ namespace EasyAmmoRocketMod
             }
         }
 
-        public void SpawnMagsWithLimit(ushort ammoAmountToSpawn, IRocketPlayer caller, SDG.Unturned.ItemGunAsset currentWeapon, UnturnedPlayer Uplayer)
+        public void SpawnMagsWithLimit(ushort ammoAmountToSpawn, IRocketPlayer caller, SDG.Unturned.ItemGunAsset currentWeapon, UnturnedPlayer Uplayer, string[] command)
         {
             if (ammoAmountToSpawn <= (ushort)EasyAmmo.Instance.Configuration.Instance.ClipLimit || caller.HasPermission("easyammo.bypasslimit"))
             {
-                if (Uplayer.GiveItem(GetMagId(Uplayer, currentWeapon), (byte)ammoAmountToSpawn))
+                if (Uplayer.GiveItem(GetMagId(Uplayer, currentWeapon, command), (byte)ammoAmountToSpawn))
                 {
-                    UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("giving_mags", ammoAmountToSpawn.ToString(), UnturnedItems.GetItemAssetById(GetMagId(Uplayer, currentWeapon)).Name, GetMagId(Uplayer, currentWeapon).ToString()));
+                    UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("giving_mags", ammoAmountToSpawn.ToString(), UnturnedItems.GetItemAssetById(GetMagId(Uplayer, currentWeapon, command)).Name, GetMagId(Uplayer, currentWeapon, command).ToString()));
                 }
                 else
                 {
@@ -157,9 +157,9 @@ namespace EasyAmmoRocketMod
                 ushort amountoverlimit = ammoAmountToSpawn;
                 ammoAmountToSpawn = (ushort)EasyAmmo.Instance.Configuration.Instance.ClipLimit;
 
-                if (Uplayer.GiveItem(GetMagId(Uplayer, currentWeapon), (byte)ammoAmountToSpawn))
+                if (Uplayer.GiveItem(GetMagId(Uplayer, currentWeapon, command), (byte)ammoAmountToSpawn))
                 {
-                    UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("over_clip_spawn_limit_giving", amountoverlimit.ToString(), EasyAmmo.Instance.Configuration.Instance.ClipLimit, UnturnedItems.GetItemAssetById(GetMagId(Uplayer, currentWeapon)).Name, GetMagId(Uplayer, currentWeapon).ToString()));
+                    UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("over_clip_spawn_limit_giving", amountoverlimit.ToString(), EasyAmmo.Instance.Configuration.Instance.ClipLimit, UnturnedItems.GetItemAssetById(GetMagId(Uplayer, currentWeapon, command)).Name, GetMagId(Uplayer, currentWeapon, command).ToString()));
                 }
                 else
                 {
@@ -168,20 +168,20 @@ namespace EasyAmmoRocketMod
             }
         }
         
-        public void SpawnMagsWithLimit_Uconomy(ushort ammoAmountToSpawn, IRocketPlayer caller, SDG.Unturned.ItemGunAsset currentWeapon, UnturnedPlayer Uplayer)
+        public void SpawnMagsWithLimit_Uconomy(ushort ammoAmountToSpawn, IRocketPlayer caller, SDG.Unturned.ItemGunAsset currentWeapon, UnturnedPlayer Uplayer, string[] command)
         {
             int costMultiplier = EasyAmmo.Instance.Configuration.Instance.PerBulletCostMultiplier;
-            SDG.Unturned.ItemMagazineAsset magazine = (SDG.Unturned.ItemMagazineAsset)UnturnedItems.GetItemAssetById(GetMagId(Uplayer, currentWeapon));
+            SDG.Unturned.ItemMagazineAsset magazine = (SDG.Unturned.ItemMagazineAsset)UnturnedItems.GetItemAssetById(GetMagId(Uplayer, currentWeapon, command));
 
             if (ammoAmountToSpawn <= (ushort)EasyAmmo.Instance.Configuration.Instance.ClipLimit || caller.HasPermission("easyammo.bypasslimit"))
             {
                 if (Uconomy.Instance.Database.GetBalance(caller.Id) >= GetCost(false, ammoAmountToSpawn, currentWeapon, magazine))
                 {
-                    if (Uplayer.GiveItem(GetMagId(Uplayer, currentWeapon), (byte)ammoAmountToSpawn))
+                    if (Uplayer.GiveItem(GetMagId(Uplayer, currentWeapon, command), (byte)ammoAmountToSpawn))
                     {
                         Uconomy.Instance.Database.IncreaseBalance(caller.Id, GetCost(true, ammoAmountToSpawn, currentWeapon, magazine));
 
-                        UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("giving_mags", ammoAmountToSpawn.ToString(), UnturnedItems.GetItemAssetById(GetMagId(Uplayer, currentWeapon)).Name, GetMagId(Uplayer, currentWeapon).ToString()));
+                        UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("giving_mags", ammoAmountToSpawn.ToString(), UnturnedItems.GetItemAssetById(GetMagId(Uplayer, currentWeapon, command)).Name, GetMagId(Uplayer, currentWeapon, command).ToString()));
                         UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("balance", Uconomy.Instance.Database.GetBalance(caller.Id)));
                     }
                     else
@@ -203,13 +203,13 @@ namespace EasyAmmoRocketMod
 
                 if (Uconomy.Instance.Database.GetBalance(caller.Id) >= GetCost(false, ammoAmountToSpawn, currentWeapon, magazine))
                 {
-                    if (Uplayer.GiveItem(GetMagId(Uplayer, currentWeapon), (byte)ammoAmountToSpawn))
+                    if (Uplayer.GiveItem(GetMagId(Uplayer, currentWeapon, command), (byte)ammoAmountToSpawn))
                     {
                         Uconomy.Instance.Database.IncreaseBalance(caller.Id, GetCost(true, ammoAmountToSpawn, currentWeapon, magazine));
 
                         UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("over_clip_spawn_limit_giving", amountoverlimit.ToString(),
-                            EasyAmmo.Instance.Configuration.Instance.ClipLimit, UnturnedItems.GetItemAssetById(GetMagId(Uplayer, currentWeapon)).Name,
-                            GetMagId(Uplayer, currentWeapon).ToString()));
+                            EasyAmmo.Instance.Configuration.Instance.ClipLimit, UnturnedItems.GetItemAssetById(GetMagId(Uplayer, currentWeapon, command)).Name,
+                            GetMagId(Uplayer, currentWeapon, command).ToString()));
                         UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("balance", Uconomy.Instance.Database.GetBalance(caller.Id)));
                     }
                     else
@@ -249,9 +249,28 @@ namespace EasyAmmoRocketMod
             return cost;
         }
 
-        public ushort GetMagId(UnturnedPlayer player, SDG.Unturned.ItemGunAsset gun)
+        public ushort GetMagId(UnturnedPlayer player, SDG.Unturned.ItemGunAsset gun, string[] command)
         {
-            ushort magId = player.Player.equipment.state[8];
+            ushort magId = 0;
+
+            if (command.Length == 2 || command.Length == 1)
+            {
+                if (command.Length == 1)
+                {
+                    if (command[0].ToLower() == "c")
+                    {
+                        magId = player.Player.equipment.state[8];
+                    }
+                }
+                else if (command.Length == 2)
+                {
+                    if (command[1].ToLower() == "c")
+                    {
+                        magId = player.Player.equipment.state[8];
+                    }
+                }
+            }
+
             if (magId == 0 || UnturnedItems.GetItemAssetById(magId).type != EItemType.MAGAZINE)
             {
                 magId = gun.magazineID;
