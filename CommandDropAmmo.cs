@@ -71,16 +71,16 @@ namespace EasyAmmoRocketMod
             {
                 if (EasyAmmo.Instance.Configuration.Instance.ClipLimitEnabled)
                 {
-                    DropMagsWithLimit(ammoAmountToSpawn, caller, currentWeapon, Uplayer);
+                    DropMagsWithLimit(ammoAmountToSpawn, caller, currentWeapon, Uplayer, command);
                 }
                 else
                 {
-                    DropMags(ammoAmountToSpawn, caller, currentWeapon, Uplayer);
+                    DropMags(ammoAmountToSpawn, caller, currentWeapon, Uplayer, command);
                 }
             }
             else
             {
-                DropMags((ushort)1, caller, currentWeapon, Uplayer);
+                DropMags((ushort)1, caller, currentWeapon, Uplayer, command);
             }
         }
 
@@ -104,9 +104,9 @@ namespace EasyAmmoRocketMod
             get { return "(amount of ammo)"; }
         }
 
-        public void DropMags(ushort ammoAmountToSpawn, IRocketPlayer caller, SDG.Unturned.ItemGunAsset currentWeapon, UnturnedPlayer Uplayer)
+        public void DropMags(ushort ammoAmountToSpawn, IRocketPlayer caller, SDG.Unturned.ItemGunAsset currentWeapon, UnturnedPlayer Uplayer, string[] command)
         {
-            UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("dropping_mags", ammoAmountToSpawn.ToString(), UnturnedItems.GetItemAssetById(GetMagId(Uplayer, currentWeapon)).Name, GetMagId(Uplayer, currentWeapon).ToString()));
+            UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("dropping_mags", ammoAmountToSpawn.ToString(), UnturnedItems.GetItemAssetById(GetMagId(Uplayer, currentWeapon, command)).Name, GetMagId(Uplayer, currentWeapon, command).ToString()));
 
             for (int ii = 0; ii < (int)ammoAmountToSpawn; ii++)
             {
@@ -114,15 +114,15 @@ namespace EasyAmmoRocketMod
             }
         }
 
-        public void DropMagsWithLimit(ushort ammoAmountToSpawn, IRocketPlayer caller, SDG.Unturned.ItemGunAsset currentWeapon, UnturnedPlayer Uplayer)
+        public void DropMagsWithLimit(ushort ammoAmountToSpawn, IRocketPlayer caller, SDG.Unturned.ItemGunAsset currentWeapon, UnturnedPlayer Uplayer, string[] command)
         {
             if (ammoAmountToSpawn <= (ushort)EasyAmmo.Instance.Configuration.Instance.ClipLimit || caller.HasPermission("easyammo.bypasslimit"))
             {
-                UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("dropping_mags", ammoAmountToSpawn.ToString(), UnturnedItems.GetItemAssetById(GetMagId(Uplayer, currentWeapon)).Name, GetMagId(Uplayer, currentWeapon).ToString()));
+                UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("dropping_mags", ammoAmountToSpawn.ToString(), UnturnedItems.GetItemAssetById(GetMagId(Uplayer, currentWeapon, command)).Name, GetMagId(Uplayer, currentWeapon, command).ToString()));
 
                 for (int ii = 0; ii < (int)ammoAmountToSpawn; ii++)
                 {
-                    ItemManager.dropItem(new Item(GetMagId(Uplayer, currentWeapon), true), Uplayer.Position, true, true, true);
+                    ItemManager.dropItem(new Item(GetMagId(Uplayer, currentWeapon, command), true), Uplayer.Position, true, true, true);
                 }
             }
             else
@@ -131,19 +131,38 @@ namespace EasyAmmoRocketMod
                 ushort amountoverlimit = ammoAmountToSpawn;
                 ammoAmountToSpawn = (ushort)EasyAmmo.Instance.Configuration.Instance.ClipLimit;
 
-                UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("over_clip_spawn_limit_dropping", amountoverlimit.ToString(), EasyAmmo.Instance.Configuration.Instance.ClipLimit, UnturnedItems.GetItemAssetById(GetMagId(Uplayer, currentWeapon)).Name, GetMagId(Uplayer, currentWeapon).ToString()));
+                UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("over_clip_spawn_limit_dropping", amountoverlimit.ToString(), EasyAmmo.Instance.Configuration.Instance.ClipLimit, UnturnedItems.GetItemAssetById(GetMagId(Uplayer, currentWeapon, command)).Name, GetMagId(Uplayer, currentWeapon, command).ToString()));
 
                 for (int ii = 0; ii < (int)ammoAmountToSpawn; ii++)
                 {
-                    ItemManager.dropItem(new Item(GetMagId(Uplayer, currentWeapon), true), Uplayer.Position, true, true, true);
+                    ItemManager.dropItem(new Item(GetMagId(Uplayer, currentWeapon, command), true), Uplayer.Position, true, true, true);
                 }
                 
             }
         }
 
-        public ushort GetMagId(UnturnedPlayer player, SDG.Unturned.ItemGunAsset gun)
+        public ushort GetMagId(UnturnedPlayer player, SDG.Unturned.ItemGunAsset gun, string[] command)
         {
-            ushort magId = player.Player.equipment.state[8];
+            ushort magId = 0;
+
+            if (command.Length == 2 || command.Length == 1)
+            {
+                if (command.Length == 1)
+                {
+                    if (command[0].ToLower() == "c")
+                    {
+                        magId = player.Player.equipment.state[8];
+                    }
+                }
+                else if (command.Length == 2)
+                {
+                    if (command[1].ToLower() == "c")
+                    {
+                        magId = player.Player.equipment.state[8];
+                    }
+                }
+            }
+
             if (magId == 0 || UnturnedItems.GetItemAssetById(magId).type != EItemType.MAGAZINE)
             {
                 magId = gun.magazineID;
