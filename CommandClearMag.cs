@@ -28,7 +28,7 @@ namespace EasyAmmoRocketMod
         {
             UnturnedPlayer Uplayer = (UnturnedPlayer)caller;
             //bool enterNumber = false;
-            int enteredAmount = 0;
+            //int enteredAmount = 0;
             int magsRemoved = 0;
             ItemAsset uItem = null;
 
