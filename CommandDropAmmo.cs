@@ -109,7 +109,6 @@ namespace EasyAmmoRocketMod
 
             for (int ii = 0; ii < (int)ammoAmountToSpawn; ii++)
             {
-                Logger.Log(ammoAmountToSpawn.ToString());
                 ItemManager.dropItem(new Item(GetMagId(Uplayer, currentWeapon, command), true), Uplayer.Position, true, true, true);
             }
         }
