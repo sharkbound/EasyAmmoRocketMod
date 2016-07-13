@@ -32,7 +32,7 @@ namespace EasyAmmoRocketMod
             SDG.Unturned.ItemAsset currentEquiped;
             UnturnedPlayer Uplayer = (UnturnedPlayer)caller;
 
-           if (command.Length == 1)
+           if (command.Length >= 1)
             {
                 if (ushort.TryParse(command[0], out ammoAmountToSpawn))
                 {

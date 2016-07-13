@@ -31,7 +31,7 @@ namespace EasyAmmoRocketMod
             SDG.Unturned.ItemAsset currentEquiped;
             UnturnedPlayer Uplayer = (UnturnedPlayer)caller;
 
-            if (command.Length == 1)
+            if (command.Length >= 1)
             {
                 if (ushort.TryParse(command[0], out ammoAmountToSpawn))
                 {
@@ -109,7 +109,8 @@ namespace EasyAmmoRocketMod
 
             for (int ii = 0; ii < (int)ammoAmountToSpawn; ii++)
             {
-                ItemManager.dropItem(new Item (currentWeapon.magazineID, true), Uplayer.Position, true, true, true);
+                Logger.Log(ammoAmountToSpawn.ToString());
+                ItemManager.dropItem(new Item(GetMagId(Uplayer, currentWeapon, command), true), Uplayer.Position, true, true, true);
             }
         }
 
