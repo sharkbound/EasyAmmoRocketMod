@@ -65,10 +65,17 @@ namespace EasyAmmoRocketMod
             {
                 AmountToSpawn = 1;
             }
-
-            for (int ii = 0; ii < AmountToSpawn; ii++)
+            
+            if (caller.HasPermission("clonei.amount"))
             {
-                Uplayer.GiveItem(newItem);  
+                for (int ii = 0; ii < AmountToSpawn; ii++)
+                {
+                    Uplayer.GiveItem(newItem);
+                } 
+            }
+            else
+            {
+                Uplayer.GiveItem(newItem);
             }
 
             UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("cloned_item", 
