@@ -46,6 +46,12 @@ namespace EasyAmmoRocketMod
                 return;
             }
 
+            if (checkIfBlacklisted(caller, currentEquiped))
+            {
+                UnturnedChat.Say(EasyAmmo.Instance.Translate("Clonei_item_blacklisted", currentEquiped.Name));
+                return;
+            }
+
             var state = Uplayer.Player.equipment.state;
 
            /* for (int count = 0; count <= state.Length - 1; count++)
@@ -101,6 +107,12 @@ namespace EasyAmmoRocketMod
         public string Syntax
         {
             get { return "(amount)"; }
+        }
+
+        bool checkIfBlacklisted(IRocketPlayer caller, ItemAsset item)
+        {
+            if (caller.HasPermission("clonei.bypassblacklist")) return false;
+            return EasyAmmo.Instance.Configuration.Instance.BannedIds.Contains(item.Id);
         }
     }
 }

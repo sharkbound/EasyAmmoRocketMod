@@ -53,7 +53,8 @@ namespace EasyAmmoRocketMod
                     {"failed_to_spawn_mags", "Failed to spawn a magazine for the gun you are holding!"},
                     {"not_enough_funds","You dont have enough {0} to buy {1} of {2}, {0} need: {3}"},
                     {"cloned_item","Cloned \"{0}\" {1} times!"},
-                    {"weapon_blacklisted","The weapon \"{0}\" is blacklisted, you cannot spawn mags for it using this command!"}
+                    {"weapon_blacklisted","The weapon \"{0}\" is blacklisted, you cannot spawn mags for it using this command!"},
+                    {"Clonei_item_blacklisted","The item \"{0}\" is blacklisted, you cannot clone this item using this command!"}
                 };
             }
         }
