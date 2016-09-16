@@ -277,5 +277,27 @@ namespace EasyAmmoRocketMod
 
             return magId;
         }
+        /*
+            Unturned weapon metadata structure.
+            metadata[0] = sight id byte 1
+            metadata[1] = sight id byte 2
+            metadata[2] = tactical id byte 1
+            metadata[3] = tactical id byte 2
+            
+            metadata[4] = grip id byte 1
+            metadata[5] = grip id byte 2
+            metadata[6] = barrel id byte 1
+            metadata[7] = barrel id byte 2
+            metadata[8] = magazine id byte 1
+            metadata[9] = magazine id byte 2
+            metadata[10] = ammo
+            metadata[11] = firemode
+            metadata[12] = ??
+            metadata[13] = sight durability
+            metadata[14] = tactical durability
+            metadata[15] = grip durability
+            metadata[16] = barrel durability
+            metadata[17] = magazine durability
+        */
     }
 }
