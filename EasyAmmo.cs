@@ -66,9 +66,9 @@ namespace EasyAmmoRocketMod
             {
                 foreach (ushort id in EasyAmmo.Instance.Configuration.Instance.BannedIds)
                 {
-                    if (currentWeapon.Id == id)
+                    if (currentWeapon.id == id)
                     {
-                        UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("weapon_blacklisted", currentWeapon.Name));
+                        UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("weapon_blacklisted", currentWeapon.itemName));
                         cantSpawnMag = true;
                     }
                 }

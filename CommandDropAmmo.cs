@@ -45,7 +45,7 @@ namespace EasyAmmoRocketMod
                 UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("nothing_equipped"));
                 return;
             }
-            if (currentEquiped.ItemType != SDG.Unturned.EItemType.GUN)
+            if (currentEquiped.type != SDG.Unturned.EItemType.GUN)
             {
                 UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("no_gun_equipped"));
                 return;
@@ -105,7 +105,7 @@ namespace EasyAmmoRocketMod
 
         public void DropMags(ushort ammoAmountToSpawn, IRocketPlayer caller, SDG.Unturned.ItemGunAsset currentWeapon, UnturnedPlayer Uplayer, string[] command)
         {
-            UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("dropping_mags", ammoAmountToSpawn.ToString(), UnturnedItems.GetItemAssetById(GetMagId(Uplayer, currentWeapon, command)).Name, GetMagId(Uplayer, currentWeapon, command).ToString()));
+            UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("dropping_mags", ammoAmountToSpawn.ToString(), UnturnedItems.GetItemAssetById(GetMagId(Uplayer, currentWeapon, command)).itemName, GetMagId(Uplayer, currentWeapon, command).ToString()));
 
             for (int ii = 0; ii < (int)ammoAmountToSpawn; ii++)
             {
@@ -117,7 +117,7 @@ namespace EasyAmmoRocketMod
         {
             if (ammoAmountToSpawn <= (ushort)EasyAmmo.Instance.Configuration.Instance.ClipLimit || caller.HasPermission("easyammo.bypasslimit"))
             {
-                UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("dropping_mags", ammoAmountToSpawn.ToString(), UnturnedItems.GetItemAssetById(GetMagId(Uplayer, currentWeapon, command)).Name, GetMagId(Uplayer, currentWeapon, command).ToString()));
+                UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("dropping_mags", ammoAmountToSpawn.ToString(), UnturnedItems.GetItemAssetById(GetMagId(Uplayer, currentWeapon, command)).itemName, GetMagId(Uplayer, currentWeapon, command).ToString()));
 
                 for (int ii = 0; ii < (int)ammoAmountToSpawn; ii++)
                 {
@@ -130,7 +130,7 @@ namespace EasyAmmoRocketMod
                 ushort amountoverlimit = ammoAmountToSpawn;
                 ammoAmountToSpawn = (ushort)EasyAmmo.Instance.Configuration.Instance.ClipLimit;
 
-                UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("over_clip_spawn_limit_dropping", amountoverlimit.ToString(), EasyAmmo.Instance.Configuration.Instance.ClipLimit, UnturnedItems.GetItemAssetById(GetMagId(Uplayer, currentWeapon, command)).Name, GetMagId(Uplayer, currentWeapon, command).ToString()));
+                UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("over_clip_spawn_limit_dropping", amountoverlimit.ToString(), EasyAmmo.Instance.Configuration.Instance.ClipLimit, UnturnedItems.GetItemAssetById(GetMagId(Uplayer, currentWeapon, command)).itemName, GetMagId(Uplayer, currentWeapon, command).ToString()));
 
                 for (int ii = 0; ii < (int)ammoAmountToSpawn; ii++)
                 {
