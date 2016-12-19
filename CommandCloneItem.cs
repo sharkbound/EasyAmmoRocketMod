@@ -48,7 +48,7 @@ namespace EasyAmmoRocketMod
 
             if (checkIfBlacklisted(caller, currentEquiped))
             {
-                UnturnedChat.Say(EasyAmmo.Instance.Translate("Clonei_item_blacklisted", currentEquiped.itemName));
+                UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("Clonei_item_blacklisted", currentEquiped.itemName));
                 return;
             }
 
