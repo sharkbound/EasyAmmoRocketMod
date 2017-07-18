@@ -164,7 +164,7 @@ namespace EasyAmmoRocketMod
 
             if (magId == 0 || UnturnedItems.GetItemAssetById(magId).type != EItemType.MAGAZINE)
             {
-                magId = gun.magazineID;
+                magId = gun.getMagazineID();
             }
 
             return magId;
