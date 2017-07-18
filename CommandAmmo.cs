@@ -256,7 +256,7 @@ namespace EasyAmmoRocketMod
             {
                 if (command.Length == 1)
                 {
-                    if (command[0].ToLower() == "c")
+                    if (command[0].ToLower() == "c"
                     {
                         magId = player.Player.equipment.state[8];
                     }

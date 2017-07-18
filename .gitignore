@@ -30,6 +30,7 @@ $RECYCLE.BIN/
 
 #ignore EasyAmmo.v12
 EasyAmmo.v12.SUO
+obj
 
 # Thumbnails
 ._*
