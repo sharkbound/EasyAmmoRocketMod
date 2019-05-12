@@ -27,17 +27,8 @@ namespace EasyAmmoRocketMod
         public void Execute(IRocketPlayer caller, string[] command)
         {
             ushort AmountToSpawn = (ushort)0;
-            bool EnteredAmount = false;
             SDG.Unturned.ItemAsset currentEquiped;
             UnturnedPlayer Uplayer = (UnturnedPlayer)caller;
-
-            if (command.Length == 1)
-            {
-                if (ushort.TryParse(command[0], out AmountToSpawn))
-                {
-                    EnteredAmount = true;
-                }
-            }
 
             currentEquiped = Uplayer.Player.equipment.asset;
             if (currentEquiped == null)
@@ -48,7 +39,7 @@ namespace EasyAmmoRocketMod
 
             if (checkIfBlacklisted(caller, currentEquiped))
             {
-                UnturnedChat.Say(EasyAmmo.Instance.Translate("Clonei_item_blacklisted", currentEquiped.Name));
+                UnturnedChat.Say(EasyAmmo.Instance.Translate("Clonei_item_blacklisted", currentEquiped.name));
                 return;
             }
 
@@ -112,7 +103,7 @@ namespace EasyAmmoRocketMod
         bool checkIfBlacklisted(IRocketPlayer caller, ItemAsset item)
         {
             if (caller.HasPermission("clonei.bypassblacklist")) return false;
-            return EasyAmmo.Instance.Configuration.Instance.BannedIds.Contains(item.Id);
+            return EasyAmmo.Instance.Configuration.Instance.BannedIds.Contains(item.id);
         }
     }
 }
