@@ -1,45 +1,30 @@
-﻿using Rocket.API;
-using Rocket.Core.Logging;
+﻿using System.Collections.Generic;
+using Rocket.API;
 using Rocket.Unturned.Chat;
 using Rocket.Unturned.Items;
 using Rocket.Unturned.Player;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using fr34kyn01535.Uconomy;
 using SDG.Unturned;
 
-namespace EasyAmmoRocketMod
+namespace EasyAmmo
 {
     class CommandCloneItem : IRocketCommand
     {
-        public List<string> Aliases
-        {
-            get { return new List<string> { }; }
-        }
+        public List<string> Aliases => new List<string>();
 
-        public AllowedCaller AllowedCaller
-        {
-            get { return Rocket.API.AllowedCaller.Player; }
-        }
+        public AllowedCaller AllowedCaller => AllowedCaller.Player;
 
         public void Execute(IRocketPlayer caller, string[] command)
         {
-            ushort AmountToSpawn = (ushort)0;
-            bool EnteredAmount = false;
-            SDG.Unturned.ItemAsset currentEquiped;
-            UnturnedPlayer Uplayer = (UnturnedPlayer)caller;
+            ushort amountToSpawn = 0;
+            ItemAsset currentEquiped;
+            UnturnedPlayer uplayer = (UnturnedPlayer)caller;
 
             if (command.Length == 1)
             {
-                if (ushort.TryParse(command[0], out AmountToSpawn))
-                {
-                    EnteredAmount = true;
-                }
+                ushort.TryParse(command[0], out amountToSpawn);
             }
 
-            currentEquiped = Uplayer.Player.equipment.asset;
+            currentEquiped = uplayer.Player.equipment.asset;
             if (currentEquiped == null)
             {
                 UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("nothing_equipped"));
@@ -48,71 +33,59 @@ namespace EasyAmmoRocketMod
 
             if (checkIfBlacklisted(caller, currentEquiped))
             {
-                UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("Clonei_item_blacklisted", currentEquiped.itemName));
+                UnturnedChat.Say(caller,
+                    EasyAmmo.Instance.Translate("Clonei_item_blacklisted", currentEquiped.itemName));
                 return;
             }
 
-            var state = Uplayer.Player.equipment.state;
+            var state = uplayer.Player.equipment.state;
 
-           /* for (int count = 0; count <= state.Length - 1; count++)
-            {
-                Logger.Log("State " + count.ToString() + " : " + state[count].ToString());
-                //state[count] = 17;
-            }  */
+            /* for (int count = 0; count <= state.Length - 1; count++)
+             {
+                 Logger.Log("State " + count.ToString() + " : " + state[count].ToString());
+                 //state[count] = 17;
+             }  */
             /*
             state[0] is a sight
             state[8] is a magazine
             state[10] is ammo count
              */
-            
-            SDG.Unturned.Item newItem = new SDG.Unturned.Item(currentEquiped.id, 100, 100, state);
 
-            if (AmountToSpawn == 0)
+            Item newItem = new Item(currentEquiped.id, 100, 100, state);
+
+            if (amountToSpawn == 0)
             {
-                AmountToSpawn = 1;
+                amountToSpawn = 1;
             }
-            
+
             if (caller.HasPermission("clonei.amount"))
             {
-                for (int ii = 0; ii < AmountToSpawn; ii++)
+                for (int ii = 0; ii < amountToSpawn; ii++)
                 {
-                    Uplayer.GiveItem(newItem);
-                } 
+                    uplayer.GiveItem(newItem);
+                }
             }
             else
             {
-                Uplayer.GiveItem(newItem);
+                uplayer.GiveItem(newItem);
             }
 
-            UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("cloned_item", 
-               UnturnedItems.GetItemAssetById(currentEquiped.id).itemName, AmountToSpawn.ToString()));
-            return;
+            UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("cloned_item",
+                UnturnedItems.GetItemAssetById(currentEquiped.id).itemName, amountToSpawn.ToString()));
         }
 
-        public string Help
-        {
-            get { return "Gives you a clone of your current item"; }
-        }
+        public string Help => "Gives you a clone of your current item";
 
-        public string Name
-        {
-            get { return "clonei"; }
-        }
+        public string Name => "clonei";
 
-        public List<string> Permissions
-        {
-            get { return new List<string> { "clonei" }; }
-        }
+        public List<string> Permissions => new List<string> { "clonei" };
 
-        public string Syntax
-        {
-            get { return "(amount)"; }
-        }
+        public string Syntax => "(amount)";
 
         bool checkIfBlacklisted(IRocketPlayer caller, ItemAsset item)
         {
-            if (caller.HasPermission("clonei.bypassblacklist")) return false;
-            return EasyAmmo.Instance.Configuration.Instance.BannedIds.Contains(item.id);
+            return !caller.HasPermission("clonei.bypassblacklist") &&
+                   EasyAmmo.Instance.Configuration.Instance.BannedIds.Contains(item.id);
         }
     }
 }

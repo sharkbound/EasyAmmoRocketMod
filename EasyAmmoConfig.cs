@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Rocket.API;
+﻿using System.Collections.Generic;
 using System.Xml.Serialization;
+using Rocket.API;
 
-namespace EasyAmmoRocketMod
+namespace EasyAmmo
 {
     public class EasyAmmoConfig : IRocketPluginConfiguration
     {
