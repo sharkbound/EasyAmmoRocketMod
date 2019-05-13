@@ -16,15 +16,14 @@ namespace EasyAmmo
         public void Execute(IRocketPlayer caller, string[] command)
         {
             ushort amountToSpawn = 0;
-            ItemAsset currentEquiped;
-            UnturnedPlayer uplayer = (UnturnedPlayer)caller;
+            var uplayer = (UnturnedPlayer) caller;
 
             if (command.Length == 1)
             {
                 ushort.TryParse(command[0], out amountToSpawn);
             }
 
-            currentEquiped = uplayer.Player.equipment.asset;
+            var currentEquiped = uplayer.Player.equipment.asset;
             if (currentEquiped == null)
             {
                 UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("nothing_equipped"));
@@ -51,7 +50,7 @@ namespace EasyAmmo
             state[10] is ammo count
              */
 
-            Item newItem = new Item(currentEquiped.id, 100, 100, state);
+            var newItem = new Item(currentEquiped.id, 100, 100, state);
 
             if (amountToSpawn == 0)
             {
@@ -78,7 +77,7 @@ namespace EasyAmmo
 
         public string Name => "clonei";
 
-        public List<string> Permissions => new List<string> { "clonei" };
+        public List<string> Permissions => new List<string> {"clonei"};
 
         public string Syntax => "(amount)";
 
