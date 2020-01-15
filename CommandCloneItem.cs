@@ -10,7 +10,7 @@ using System.Text;
 using fr34kyn01535.Uconomy;
 using SDG.Unturned;
 
-namespace EasyAmmoRocketMod
+namespace EasyAmmo
 {
     class CommandCloneItem : IRocketCommand
     {

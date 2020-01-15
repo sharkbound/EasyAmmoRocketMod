@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using EasyAmmo;
 using Rocket.Unturned.Player;
 using Rocket.API;
 using Rocket.Core.Plugins;
 using Rocket.Core.Logging;
 using Rocket.Unturned.Chat;
 
-namespace EasyAmmoRocketMod
+namespace EasyAmmo
 {
     public class EasyAmmo : RocketPlugin<EasyAmmoConfig>
     {
@@ -24,8 +25,10 @@ namespace EasyAmmoRocketMod
             Logger.Log("ClipLimit : " + Instance.Configuration.Instance.ClipLimit.ToString());
             Logger.Log("UconomySupportEnabled : " + Instance.Configuration.Instance.UconomySupportEnabled.ToString());
             Logger.Log("BulletCostMultiplier : " + Instance.Configuration.Instance.PerBulletCostMultiplier);
-            Logger.Log("ScaleCostByWeaponDamage : " + Instance.Configuration.Instance.ScaleCostByWeaponDamage.ToString());
-            Logger.Log("WeaponDamageCostMultiplier : " + Instance.Configuration.Instance.WeaponDamageCostMultiplier.ToString());
+            Logger.Log(
+                "ScaleCostByWeaponDamage : " + Instance.Configuration.Instance.ScaleCostByWeaponDamage.ToString());
+            Logger.Log("WeaponDamageCostMultiplier : " +
+                       Instance.Configuration.Instance.WeaponDamageCostMultiplier.ToString());
             Logger.LogWarning("------------------------------------");
         }
 
@@ -40,21 +43,33 @@ namespace EasyAmmoRocketMod
             {
                 return new Rocket.API.Collections.TranslationList
                 {
-                    {"over_clip_spawn_limit_giving", "{0} is over the spawn limit, giving you {1} of \"{2}\" ID: \"{3}\" instead"},
-                    {"over_clip_spawn_limit_dropping", "{0} is over the spawn limit, dropping {1} of \"{2}\" ID: \"{3}\" instead"},
+                    {
+                        "over_clip_spawn_limit_giving",
+                        "{0} is over the spawn limit, giving you {1} of \"{2}\" ID: \"{3}\" instead"
+                    },
+                    {
+                        "over_clip_spawn_limit_dropping",
+                        "{0} is over the spawn limit, dropping {1} of \"{2}\" ID: \"{3}\" instead"
+                    },
                     {"balance", "Remaining balance: {0}"},
                     {"cost", "Cost Per-Mag: {0}"},
                     {"no_gun_equipped", "You dont have any guns equipped!"},
                     {"nothing_equipped", "You dont have anything equipped!"},
-                    {"gun_asset_not_found","Gun asset is not found!"},
+                    {"gun_asset_not_found", "Gun asset is not found!"},
                     {"dropping_mags", "Dropping {0} of \"{1}\" ID: \"{2}\" on your location"},
                     {"giving_mags", "Giving you {0} of \"{1}\" ID: \"{2}\""},
                     {"removed_mags", "Removed {0} Magazines from your inventory!"},
                     {"failed_to_spawn_mags", "Failed to spawn a magazine for the gun you are holding!"},
-                    {"not_enough_funds","You dont have enough {0} to buy {1} of {2}, {0} need: {3}"},
-                    {"cloned_item","Cloned \"{0}\" {1} times!"},
-                    {"weapon_blacklisted","The weapon \"{0}\" is blacklisted, you cannot spawn mags for it using this command!"},
-                    {"Clonei_item_blacklisted","The item \"{0}\" is blacklisted, you cannot clone this item using this command!"}
+                    {"not_enough_funds", "You dont have enough {0} to buy {1} of {2}, {0} need: {3}"},
+                    {"cloned_item", "Cloned \"{0}\" {1} times!"},
+                    {
+                        "weapon_blacklisted",
+                        "The weapon \"{0}\" is blacklisted, you cannot spawn mags for it using this command!"
+                    },
+                    {
+                        "Clonei_item_blacklisted",
+                        "The item \"{0}\" is blacklisted, you cannot clone this item using this command!"
+                    }
                 };
             }
         }
