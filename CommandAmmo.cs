@@ -18,10 +18,8 @@ namespace EasyAmmo
         public void Execute(IRocketPlayer caller, string[] command)
         {
             ushort ammoAmountToSpawn = 0;
-            bool enteredAmount = false;
-            ItemGunAsset currentWeapon;
-            ItemAsset currentEquiped;
-            UnturnedPlayer uPlayer = (UnturnedPlayer) caller;
+            var enteredAmount = false;
+            var uPlayer = (UnturnedPlayer) caller;
 
             if (command.Length >= 1)
             {
@@ -31,7 +29,7 @@ namespace EasyAmmo
                 }
             }
 
-            currentEquiped = uPlayer.Player.equipment.asset;
+            var currentEquiped = uPlayer.Player.equipment.asset;
             if (currentEquiped == null)
             {
                 UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("nothing_equipped"));
@@ -47,14 +45,7 @@ namespace EasyAmmo
             //UnturnedChat.Say(caller, " your current equipped item is \" id: " + currentEquiped + " / " + "name: " + currentEquiped.name);
             //UnturnedChat.Say(caller, "item type: " + item.GetType().ToString());
 
-            currentWeapon = (ItemGunAsset) currentEquiped;
-            if (currentWeapon == null)
-            {
-                UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("gun_asset_not_found"));
-                return;
-            }
-
-            if (EasyAmmo.CheckIfBlacklisted(caller, currentWeapon))
+            if (!(currentEquiped is ItemGunAsset currentWeapon) || EasyAmmo.CheckIfBlacklisted(caller, currentWeapon))
             {
                 return;
             }
