@@ -193,7 +193,8 @@ namespace EasyAmmo
                     UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("not_enough_funds",
                         Uconomy.Instance.Configuration.Instance.MoneyName,
                         ammoAmountToSpawn, magazine.itemName,
-                        GetCost(false, ammoAmountToSpawn, currentWeapon, magazine).ToString(CultureInfo.InvariantCulture)));
+                        GetCost(false, ammoAmountToSpawn, currentWeapon, magazine)
+                            .ToString(CultureInfo.InvariantCulture)));
                 }
             }
             else
@@ -227,7 +228,8 @@ namespace EasyAmmo
                     UnturnedChat.Say(caller, EasyAmmo.Instance.Translate("not_enough_funds",
                         Uconomy.Instance.Configuration.Instance.MoneyName,
                         ammoAmountToSpawn, magazine.itemName,
-                        GetCost(false, ammoAmountToSpawn, currentWeapon, magazine).ToString(CultureInfo.InvariantCulture)));
+                        GetCost(false, ammoAmountToSpawn, currentWeapon, magazine)
+                            .ToString(CultureInfo.InvariantCulture)));
                 }
             }
         }
@@ -261,19 +263,10 @@ namespace EasyAmmo
 
             if (command.Length == 2 || command.Length == 1)
             {
-                if (command.Length == 1)
+                if ((command.Length == 1 && command[0].ToLower() == "c") ||
+                    (command.Length == 2 && command[1].ToLower() == "c"))
                 {
-                    if (command[0].ToLower() == "c")
-                    {
-                        magId = player.Player.equipment.state[8];
-                    }
-                }
-                else if (command.Length == 2)
-                {
-                    if (command[1].ToLower() == "c")
-                    {
-                        magId = player.Player.equipment.state[8];
-                    }
+                    magId = player.Player.equipment.state[8];
                 }
             }
 
